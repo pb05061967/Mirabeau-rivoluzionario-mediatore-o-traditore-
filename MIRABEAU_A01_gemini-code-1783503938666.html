@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operazione Armadio di Ferro - Mirabeau</title>
+    <style>
+        :root {
+            --primary: #8b1e0f;
+            --primary-light: #b83a28;
+            --dark: #2c2c2c;
+            --light: #f9f6f0;
+            --accent: #d4af37;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4a0e06, var(--primary));
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-style: italic;
+            margin-top: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro-box {
+            background: white;
+            border-left: 5px solid var(--primary);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-radius: 4px;
+        }
+
+        /* TIMER SECTION */
+        .timer-container {
+            background: #222;
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--accent);
+        }
+
+        .timer-display {
+            font-family: monospace;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .timer-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+            transition: 0.2s;
+        }
+
+        .timer-btn:hover { background: var(--primary-light); }
+        .timer-btn.secondary { background: #555; }
+        .timer-btn.secondary:hover { background: #777; }
+
+        /* TABS FOR GROUPS */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: #ddd;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0 0 4px 4px;
+            box-shadow: var(--shadow);
+            display: none;
+            border-top: 4px solid var(--primary);
+        }
+
+        .tab-content.active { display: block; }
+
+        /* EVIDENCE LAB */
+        .evidence-section {
+            margin-top: 3rem;
+        }
+
+        .filter-container {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .evidence-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .card::before {
+            content: "REPERTO";
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            background: #eee;
+            padding: 0.2rem 0.5rem;
+            color: #666;
+            border-radius: 3px;
+        }
+
+        .card.radicale { border-left: 5px solid #d9534f; }
+        .card.costituzionale { border-left: 5px solid #5cb85c; }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        blockquote {
+            margin: 0 0 1rem 0;
+            font-style: italic;
+            border-left: 3px solid #ccc;
+            padding-left: 1rem;
+        }
+
+        /* OUTCOME TICKET */
+        .exit-ticket {
+            background: #f0f4f8;
+            border: 2px dashed #4a69bd;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 600px;
+            height: 100px;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            font-family: inherit;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🔬 Operazione Armadio di Ferro</h1>
+    <p>Il Processo Postumo a Mirabeau e la Crisi della Sovranità (1790-1792)</p>
+</header>
+
+<div class="container">
+
+    <div class="intro-box">
+        <h3>Scenario di Crisi</h3>
+        <p>Parigi, Novembre 1792. Il re Luigi XVI è stato deposto. In un recesso segreto del palazzo reale (l'<em>Armadio di Ferro</em>), viene scoperta la corrispondenza segreta del defunto conte di Mirabeau, l'eroe dei primi anni della Rivoluzione. I documenti rivelano che riceveva ingenti somme dalla corte. La nazione è sotto shock: era un geniale statista realista o un vile traditore?</p>
+    </div>
+
+    <!-- TIMER INTERATTIVO -->
+    <div class="timer-container">
+        <h3>⏱️ Gestione del Tempo di Crisi</h3>
+        <div class="timer-display" id="display">15:00</div>
+        <button class="timer-btn" onclick="startTimer(15)">Fase 1: Studio (15m)</button>
+        <button class="timer-btn" onclick="startTimer(20)">Fase 2: Comitati (20m)</button>
+        <button class="timer-btn" onclick="startTimer(10)">Fase 3: Dibattito (10m)</button>
+        <button class="timer-btn secondary" id="pauseBtn" onclick="togglePause()">Pausa</button>
+    </div>
+
+    <!-- BRIEFING SEGRETI DEI GRUPPI -->
+    <h2>📁 Dossier di Gruppo (Briefing Segreti)</h2>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'gruppo1')">1. Comitato Salute Pubblica</button>
+        <button class="tab-btn" onclick="openTab(event, 'gruppo2')">2. Club dei Foglianti</button>
+        <button class="tab-btn" onclick="openTab(event, 'gruppo3')">3. Gabinetto del Re</button>
+    </div>
+
+    <div id="gruppo1" class="tab-content active">
+        <h3>Fazione Radicale (I Repubblicani)</h3>
+        <p><strong>Il vostro obiettivo:</strong> Dimostrare che la Monarchia Costituzionale era una truffa e che Mirabeau ha venduto i diritti del popolo. Richiedete la rimozione immediata del suo corpo dal Panthéon.</p>
+        <p>⚠️ <strong>Output Richiesto:</strong> Redigete un <em>"Atto di Accusa Pubblica"</em> (max 200 parole). Usate una retorica tagliente ed evocate il pericolo del complotto controrivoluzionario.</p>
+    </div>
+
+    <div id="gruppo2" class="tab-content">
+        <h3>Fazione Moderata (I Costituzionalisti)</h3>
+        <p><strong>Il vostro obiettivo:</strong> Difendere l'ideale della Monarchia Costituzionale. Se Mirabeau crolla, il Paese scivolerà nella tirannia della piazza. Dimostrate che agiva con pragmatismo per salvare lo Stato.</p>
+        <p>⚠️ <strong>Output Richiesto:</strong> Redigete una <em>"Lettera Aperta ai Cittadini"</em>. Sostenete che Mirabeau non stava vendendo la patria, ma "comprando" il Re alla causa della libertà.</p>
+    </div>
+
+    <div id="gruppo3" class="tab-content">
+        <h3>Il Gabinetto Segreto (I Realisti - Simulazione Anno 1790)</h3>
+        <p><strong>Il vostro obiettivo:</strong> Siete nel 1790. Ricevete le offerte di collaborazione di Mirabeau. La Corona lo disprezza ma ha bisogno del suo potere oratorio per fermare i democratici.</p>
+        <p>⚠️ <strong>Output Richiesto:</strong> Scrivete la <em>"Risposta Segreta della Corona"</em>. Stabilite a quali condizioni accettate i suoi consigli e se siete disposti a concedere una Costituzione.</p>
+    </div>
+
+    <!-- ARCHIVIO DELLE FONTI / INDIZI -->
+    <div class="evidence-section">
+        <h2>🔎 Laboratorio di Analisi Forense (Le Fonti)</h2>
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterEvidence('all', event)">Mostra Tutti</button>
+            <button class="filter-btn" onclick="filterEvidence('costituzionale', event)">Difesa / Linea Moderata</button>
+            <button class="filter-btn" onclick="filterEvidence('radicale', event)">Accusa / Linea Radicale</button>
+        </div>
+
+        <div class="evidence-grid">
+            <!-- REPERTO 1 -->
+            <div class="card costituzionale">
+                <div class="card-meta">23 GIUGNO 1789 — DISCORSO ALL'ASSEMBLEA</div>
+                <blockquote>«Signore, andate a dire a coloro che vi mandano che noi siamo qui per la volontà del popolo, e che non ci strapperete dai nostri seggi se non per la forza delle baionette!»</blockquote>
+                <small><strong>Focus:</strong> Mirabeau si erge a scudo del Terzo Stato contro l'assolutismo regio.</small>
+            </div>
+
+            <!-- REPERTO 2 -->
+            <div class="card costituzionale">
+                <div class="card-meta">1 SETTEMBRE 1789 — SUL VETO REALE</div>
+                <blockquote>«Preferirei vivere a Costantinopoli, sotto il dispotismo del Gran Signore, piuttosto che in una repubblica dove un'assemblea di 1200 persone si dichiarasse sovrana assoluta... Il veto del Re protegge la libertà.»</blockquote>
+                <small><strong>Focus:</strong> Teoria dei pesi e contrappesi per evitare la dittatura parlamentare.</small>
+            </div>
+
+            <!-- REPERTO 3 -->
+            <div class="card radicale">
+                <div class="card-meta">ANNO 1789 — ROBESPIERRE CONTRO IL VETO</div>
+                <blockquote>«Colui che dice che un uomo ha il diritto di opporsi alla legge, dice che la volontà di un solo uomo è al di sopra della volontà di tutti. La sovranità o è interamente del popolo, o appartiene al Re.»</blockquote>
+                <small><strong>Focus:</strong> Rifiuto totale del compromesso costituzionale e del potere monarchico.</small>
+            </div>
+
+            <!-- REPERTO 4 -->
+            <div class="card costituzionale">
+                <div class="card-meta">1 GIUGNO 1790 — NOTA SEGRETA AL RE (DALL'ARMADIO DI FERRO)</div>
+                <blockquote>«Sire, io voglio essere il restauratore del vostro legittimo potere... Un solo popolo, un solo re: questa uguaglianza assoluta facilita l'esercizio del potere reale molto più dell'antico caos feudale.»</blockquote>
+                <small><strong>Focus:</strong> La prova del patto segreto. Realpolitik o tradimento economico?</small>
+            </div>
+
+            <!-- REPERTO 5 -->
+            <div class="card radicale">
+                <div class="card-meta">10 AGOSTO 1790 — MARAT SU "L'AMI DU PEUPLE"</div>
+                <blockquote>«Questo grande oratore che un tempo ruggiva contro i ministri... oggi le sue labbra sputano solo veleno moderato. Quest'uomo ha l'anima di un cortigiano sotto la maschera di un tribuno.»</blockquote>
+                <small><strong>Focus:</strong> La denuncia giornalistica radicale della sospetta moderazione di Mirabeau.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- CODA INTERATTIVA / INDIVIDUALE -->
+    <div class="exit-ticket">
+        <h2>🎟️ Exit Ticket (Verifica di fine sessione)</h2>
+        <p>Se fossi stato un cittadino di Parigi nel 1792, avresti rimosso il corpo di Mirabeau dal Panthéon o avresti continuato a difendere il suo valore politico? Conta di più l'onestà ideale o l'efficacia pratica in politica?</p>
+        <textarea placeholder="Scrivi qui la tua riflessione sintetica (max 3 righe)..."></textarea>
+        <br><br>
+        <button class="timer-btn" onclick="alert('Riflessione salvata localmente! Confrontala ora con il tuo compagno di banco.')">Consegna Risposta</button>
+    </div>
+
+</div>
+
+<script>
+    // TIMER SCRIPT
+    let countdown;
+    let timerSeconds;
+    let isPaused = false;
+
+    function startTimer(minutes) {
+        clearInterval(countdown);
+        isPaused = false;
+        document.getElementById('pauseBtn').innerText = "Pausa";
+        timerSeconds = minutes * 60;
+        displayTime();
+        countdown = setInterval(function() {
+            if(!isPaused) {
+                timerSeconds--;
+                displayTime();
+                if (timerSeconds <= 0) {
+                    clearInterval(countdown);
+                    alert("Tempo scaduto per questa fase!");
+                }
+            }
+        }, 1000);
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        document.getElementById('pauseBtn').innerText = isPaused ? "Riprendi" : "Pausa";
+    }
+
+    function displayTime() {
+        const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+        const s = (timerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('display').innerText = `${m}:${s}`;
+    }
+
+    // TABS SCRIPT
+    function openTab(evt, groupName) {
+        const tabcontents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabcontents.length; i++) {
+            tabcontents[i].style.display = "none";
+        }
+        const tabbuttons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < tabbuttons.length; i++) {
+            tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+        }
+        document.getElementById(groupName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // FILTER EVIDENCE SCRIPT
+    function filterEvidence(category, evt) {
+        const cards = document.getElementsByClassName("card");
+        const filters = document.getElementsByClassName("filter-btn");
+        
+        for (let i = 0; i < filters.length; i++) {
+            filters[i].className = filters[i].className.replace(" active", "");
+        }
+        evt.currentTarget.className += " active";
+
+        for (let i = 0; i < cards.length; i++) {
+            if (category === "all") {
+                cards[i].style.display = "block";
+            } else {
+                if (cards[i].classList.contains(category)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.style.display = "none"; // Fix per l'ovvia sovrascrittura di sicurezza
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
