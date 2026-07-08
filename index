@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirabeau: Rivoluzionario, Mediatore o Traditore?</title>
+    <style>
+        :root {
+            --primary: #8b1e0f;
+            --primary-light: #b83a28;
+            --dark: #2c2c2c;
+            --light: #f9f6f0;
+            --accent: #d4af37;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4a0e06, var(--primary));
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2.3rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-style: italic;
+            margin-top: 0.5rem;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-box {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+            border-radius: 6px;
+            border-top: 4px solid var(--primary);
+        }
+
+        .image-wrapper {
+            text-align: center;
+            margin: 1.5rem 0;
+            background: #fdfcf7;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            border-radius: 2px;
+        }
+
+        .image-fallback-desc {
+            font-size: 0.9rem;
+            color: #555;
+            font-style: italic;
+            margin-top: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        /* TIMER SECTION */
+        .timer-container {
+            background: #222;
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border: 2px solid var(--accent);
+        }
+
+        .timer-display {
+            font-family: monospace;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 0.25rem;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .btn:hover { background: var(--primary-light); }
+        .btn.secondary { background: #555; }
+        .btn.secondary:hover { background: #777; }
+
+        /* QUIZ STYLE */
+        .quiz-option {
+            background: #f5f5f5;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            cursor: pointer;
+            border-left: 4px solid #ccc;
+            transition: 0.2s;
+        }
+        .quiz-option:hover { background: #eee; }
+        .quiz-option.correct { background: #d4edda; border-left-color: #28a745; color: #155724; }
+        .quiz-option.wrong { background: #f8d7da; border-left-color: #dc3545; color: #721c24; }
+
+        /* SIMULATOR STYLE */
+        .stat-bar-container {
+            background: #eee;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        .stat-bar {
+            height: 25px;
+            width: 50%;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            line-height: 25px;
+            transition: width 0.5s ease;
+        }
+        .stat-bar.corte { background: #4a69bd; }
+
+        /* TABS FOR GROUPS */
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .tab-btn {
+            flex: 1; padding: 1rem; background: #ddd; border: none;
+            font-size: 1rem; font-weight: bold; cursor: pointer;
+            border-radius: 4px 4px 0 0; transition: 0.2s; font-family: inherit;
+        }
+        .tab-btn.active { background: var(--primary); color: white; }
+        .tab-content { display: none; padding: 1.5rem; border: 1px solid #ddd; border-top: none; background: #fff;}
+        .tab-content.active { display: block; }
+
+        /* EVIDENCE GRID */
+        .evidence-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1rem;}
+        @media (min-width: 768px) { .evidence-grid { grid-template-columns: 1fr 1fr; } }
+        .card { background: #fdfdfd; border: 1px solid #ddd; border-left: 5px solid #ccc; padding: 1.2rem; border-radius: 4px; }
+        .card.costituzionale { border-left-color: #5cb85c; }
+        .card.radicale { border-left-color: #d9534f; }
+        blockquote { margin: 0 0 0.5rem 0; font-style: italic; }
+
+        textarea { width: 100%; height: 80px; margin-top: 0.5rem; font-family: inherit;}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏛️ Mirabeau: Rivoluzionario, Mediatore o Traditore?</h1>
+    <p>Laboratorio Scientifico-Didattico di Crisi Istituzionale (1789-1792)</p>
+</header>
+
+<div class="container">
+
+    <!-- INTRODUZIONE ED ICONOGRAFIA PRINCIPALE -->
+    <div class="section-box">
+        <h3>Lo Scenario Storico</h3>
+        <p>Parigi, 1792. La monarchia è caduta e l'esame dei documenti privati di Luigi XVI porta alla luce una verità sconvolgente: il Conte di Mirabeau, la voce tonante del Terzo Stato, riceveva compensi segreti dalla Corona. Questo strumento interattivo permette alla classe di analizzare i reperti storici, testare le proprie competenze e simulare le dinamiche della Realpolitik rivoluzionaria.</p>
+        
+        <div class="image-wrapper">
+            <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcRphlJxA3scqPOB3KDI9Jal-Xh_fNv25YZ0f9Ppyh5S3NURY0tCX91l4CCRA2zE2WkdqtQ8NwqoicxwEvU" alt="Ritratto di Honoré Gabriel Riqueti de Mirabeau">
+            <div class="image-fallback-desc">
+                <strong>Nota iconografica:</strong> Incisione d'epoca raffigurante il ritratto a mezzo busto del Conte di Mirabeau, caratterizzato dai capelli incipriati mossi, lo sguardo fiero rivolto verso l'alto e l'abito tipico dei deputati dell'Assemblea Nazionale. Mostra la fisionomia segnata dal vaiolo che lo rendeva un personaggio unico e magnetico sulla tribuna.
+            </div>
+        </div>
+    </div>
+
+    <!-- TIMER INTERATTIVO -->
+    <div class="timer-container">
+        <h3>⏱️ Controllo del Tempo per la Sessione di Debate</h3>
+        <div class="timer-display" id="display">15:00</div>
+        <button class="btn" onclick="startTimer(15)">Fase 1: Studio Fonti (15m)</button>
+        <button class="btn" onclick="startTimer(20)">Fase 2: Lavoro di Gruppo (20m)</button>
+        <button class="btn" onclick="startTimer(10)">Fase 3: Discussione (10m)</button>
+        <button class="btn secondary" id="pauseBtn" onclick="togglePause()">Pausa</button>
+    </div>
+
+    <!-- NUOVA SEZIONE: QUIZ INTERATTIVO -->
+    <div class="section-box">
+        <h3>📋 Quiz di Verifica Formativa (Formativo Lampo)</h3>
+        <p>Verifica le tue conoscenze di base prima di iniziare la simulazione d'Arringa.</p>
+        <div id="quiz-container">
+            <p><strong>Domanda:</strong> Quale prerogativa regia difese accanitamente Mirabeau durante i dibattiti costituzionali del settembre 1789?</p>
+            <div class="quiz-option" onclick="checkQuiz(this, false)">L'abolizione totale dei diritti feudali senza indennizzo</div>
+            <div class="quiz-option" onclick="checkQuiz(this, true)">Il diritto di veto assoluto del Re sulle leggi dell'Assemblea</div>
+            <div class="quiz-option" onclick="checkQuiz(this, false)">Il trasferimento coatto della corte reale da Versailles a Parigi</div>
+            <div id="quiz-feedback" style="margin-top:1rem; font-weight:bold;"></div>
+        </div>
+    </div>
+
+    <!-- NUOVA SEZIONE: SIMULATORE DI SCELTE (REALPOLITIK) -->
+    <div class="section-box">
+        <h3>🎭 Simulatore di Crisi: Nei Panni di Mirabeau</h3>
+        <p>Sei il Conte di Mirabeau nel maggio 1790. Bilancia le tue scelte per evitare che la Francia scivoli nella guerra civile o che la Corte ti dichiari nemico pubblico. Le tue scelte modificheranno i parametri in tempo reale.</p>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label><strong>Fede della Piazza / Rivoluzionari:</strong></label>
+            <div class="stat-bar-container"><div id="bar-popolo" class="stat-bar">50%</div></div>
+            
+            <label><strong>Favore della Corona / Re:</strong></label>
+            <div class="stat-bar-container"><div id="bar-corte" class="stat-bar corte">50%</div></div>
+        </div>
+
+        <div id="sim-scenario">
+            <p><strong>Scenario Corrente:</strong> L'Assemblea discute a chi debba spettare il diritto di dichiarare la guerra e firmare la pace. Cosa decidi di sostenere pubblicamente?</p>
+            <button class="btn" onclick="makeChoice('popolo')">Assegnare il diritto esclusivamente all'Assemblea Nazionale</button>
+            <button class="btn" onclick="makeChoice('compromesso')">Sostenere un diritto concorrente: il Re propone, l'Assemblea approva</button>
+            <button class="btn" onclick="makeChoice('re')">Lasciare il diritto assoluto di pace e guerra nelle mani del Sovrano</button>
+        </div>
+        <p id="sim-feedback" style="font-style:italic; color: #444; margin-top: 1rem;"></p>
+    </div>
+
+    <!-- DOSSIER E BRIEFING GRUPPI -->
+    <div class="section-box">
+        <h3>📁 Comitati di Crisi e Briefing Segreti</h3>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(evt, 'gruppo1')">1. Radicali</button>
+            <button class="tab-btn" onclick="openTab(evt, 'gruppo2')">2. Costituzionalisti</button>
+            <button class="tab-btn" onclick="openTab(evt, 'gruppo3')">3. Gabinetto Reale</button>
+        </div>
+
+        <div id="gruppo1" class="tab-content active">
+            <h4>Comitato di Salute Pubblica (L'Accusa)</h4>
+            <p>Dimostrate che Mirabeau ha tradito la sovranità nazionale. Richiedete lo sfratto delle sue spoglie dal Panthéon.</p>
+            <textarea placeholder="Scrivete qui le parole chiave dell'Atto d'Accusa..."></textarea>
+        </div>
+        <div id="gruppo2" class="tab-content">
+            <h4>Club dei Foglianti (La Difesa del Pragmatismo)</h4>
+            <p>Argomentate che Mirabeau voleva stabilizzare lo Stato comprando la fedeltà del Re alle leggi costituzionali.</p>
+            <textarea placeholder="Scrivete qui le linee difensive sulla stabilità..."></textarea>
+        </div>
+        <div id="gruppo3" class="tab-content">
+            <h4>Consiglio Privato delle Tuileries (La Corona - 1790)</h4>
+            <p>Pianificate le richieste economiche da imporre a Mirabeau in cambio del pagamento dei suoi debiti personali.</p>
+            <textarea placeholder="Scrivete qui le condizioni regie poste all'oratore..."></textarea>
+        </div>
+    </div>
+
+    <!-- LABORATORIO DELLE FONTI -->
+    <div class="section-box">
+        <h3>🔎 Raccolta Reperti e Fonti Coeve</h3>
+        <div class="evidence-grid">
+            <div class="card costituzionale">
+                <strong>Reperto 1 (Giugno 1789)</strong>
+                <blockquote>«Siamo qui per la volontà del popolo e non ce ne andremo se non per la forza delle baionette!»</blockquote>
+                <small>Uso: Prova di fedeltà iniziale del personaggio alla causa comune.</small>
+            </div>
+            <div class="card radicale">
+                <strong>Reperto 2 (Agosto 1790 - Marat)</strong>
+                <blockquote>«Quest'uomo ha l'anima di un cortigiano sotto la maschera di un tribuno.»</blockquote>
+                <small>Uso: Dimostrazione che i sospetti di corruzione erano diffusi sul nascere.</small>
+            </div>
+        </div>
+
+        <div class="image-wrapper" style="margin-top: 2rem;">
+            <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSOkG7watdSOeD35bGdnVOsfiNtecepfRTTx820PmyanMVfnKMDdPFWJPBtvLBK4CME5SWEZ-N7mF_LQJo" alt="Assalto alle Tuileries del 10 agosto 1792">
+            <div class="image-fallback-desc">
+                <strong>Nota iconografica:</strong> Dipinto storico rappresentante il violento assalto del popolo di Parigi al Palazzo delle Tuileries il 10 agosto 1792. Si notano i fumi dei focolari e dei colpi di moschetto, i soldati in uniforme e i sanculotti armati. Questo evento segnerà il crollo definitivo della monarchia e porterà alla scoperta dei documenti segreti di Mirabeau.
+            </div>
+        </div>
+    </div>
+
+    <!-- EXIT TICKET DI VERIFICA -->
+    <div class="section-box" style="border: 2px dashed var(--primary); background: #fffcf9;">
+        <h3>🎟️ Exit Ticket per lo Studente</h3>
+        <p>Conta più l'intransigenza etica dei valori o il pragmatismo dei risultati concreti nella gestione di una transizione politica?</p>
+        <textarea id="exit-text" placeholder="Rispondi sinteticamente in un massimo di 3 righe da sottoporre al docente..."></textarea>
+        <br><br>
+        <button class="btn" onclick="alert('Risposta registrata nel sistema locale della classe!')">Invia Risposta</button>
+    </div>
+
+</div>
+
+<script>
+    // TIMER ENGINE
+    let countdown, timerSeconds, isPaused = false;
+    function startTimer(minutes) {
+        clearInterval(countdown); isPaused = false;
+        document.getElementById('pauseBtn').innerText = "Pausa";
+        timerSeconds = minutes * 60; displayTime();
+        countdown = setInterval(function() {
+            if(!isPaused) {
+                timerSeconds--; displayTime();
+                if (timerSeconds <= 0) { clearInterval(countdown); alert("Fase conclusa!"); }
+            }
+        }, 1000);
+    }
+    function togglePause() { isPaused = !isPaused; document.getElementById('pauseBtn').innerText = isPaused ? "Riprendi" : "Pausa"; }
+    function displayTime() {
+        const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+        const s = (timerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('display').innerText = `${m}:${s}`;
+    }
+
+    // QUIZ ENGINE
+    function checkQuiz(element, isCorrect) {
+        const feedback = document.getElementById('quiz-feedback');
+        if(isCorrect) {
+            element.className = "quiz-option correct";
+            feedback.innerHTML = "Corretto! Mirabeau considerava il veto regio uno scudo essenziale contro la potenziale tirannia di un'assemblea unica.";
+            feedback.style.color = "#28a745";
+        } else {
+            element.className = "quiz-option wrong";
+            feedback.innerHTML = "Errato. Ricorda che Mirabeau tentava di preservare l'equilibrio costituzionale del sovrano.";
+            feedback.style.color = "#dc3545";
+        }
+    }
+
+    // SIMULATOR ENGINE
+    let popolo = 50, corte = 50;
+    function makeChoice(type) {
+        const f = document.getElementById('sim-feedback');
+        if(type === 'popolo') { popolo += 25; corte -= 30; f.innerText = "La piazza ti acclama come eroe, ma Luigi XVI interrompe i pagamenti segreti ritenendoti un traditore estremista."; }
+        if(type === 'compromesso') { popolo += 5; corte += 15; f.innerText = "Ottieni un fragile equilibrio istituzionale. Entrambe le parti mugugnano ma mantieni in piedi il compromesso."; }
+        if(type === 're') { popolo -= 35; corte += 30; f.innerText = "La corte ti premia con oro generoso, ma i cordiglieri e i giacobini stampano pamphlet accusandoti apertamente di tradimento."; }
+        
+        popolo = Math.max(0, Math.min(100, popolo));
+        corte = Math.max(0, Math.min(100, corte));
+        
+        document.getElementById('bar-popolo').style.width = popolo + '%';
+        document.getElementById('bar-popolo').innerText = popolo + '%';
+        document.getElementById('bar-corte').style.width = corte + '%';
+        document.getElementById('bar-corte').innerText = corte + '%';
+    }
+
+    // TABS ENGINE
+    function openTab(evt, groupName) {
+        const contents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < contents.length; i++) contents[i].style.display = "none";
+        const buttons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < buttons.length; i++) buttons[i].className = buttons[i].className.replace(" active", "");
+        document.getElementById(groupName).style.display = "block";
+        if(evt) evt.currentTarget.className += " active";
+    }
+    let evt = null;
+</script>
+</body>
+</html>
