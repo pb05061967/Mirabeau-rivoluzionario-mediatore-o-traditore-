@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BLOCCO INDICIZZAZIONE: La pagina è invisibile ai motori di ricerca -->
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    
+    <title>Mirabeau: rivoluzionario, mediatore o traditore?</title>
+    <style>
+        :root {
+            --primary: #8b1e0f;
+            --primary-light: #b83a28;
+            --dark: #2c2c2c;
+            --light: #f9f6f0;
+            --accent: #d4af37;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Schermata di blocco iniziale con password */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #2c2c2c; color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; font-family: 'Georgia', serif;
+        }
+        .lock-box { background: #fff; color: #2c2c2c; padding: 2.5rem; border-radius: 8px; box-shadow: var(--shadow); text-align: center; border-top: 5px solid var(--primary); max-width: 400px; width: 90%; }
+        .lock-input { width: 100%; padding: 0.7rem; margin: 1rem 0; box-sizing: border-box; font-size: 1.1rem; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
+
+        /* Protezione anti-selezione del testo per gli studenti */
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0; padding: 0;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4a0e06, var(--primary));
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        header h1 { font-size: 2.3rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        header p { font-style: italic; margin-top: 0.5rem; color: #e0e0e0; }
+        
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        
+        /* Gestione dei macro passi dell'attività */
+        .activity-step { display: none; }
+        .activity-step.active-step { display: block; animation: fadeIn 0.5s ease; }
+
+        .section-box { background: white; padding: 2rem; margin-bottom: 2.5rem; box-shadow: var(--shadow); border-radius: 6px; border-top: 4px solid var(--primary); }
+        .image-wrapper { text-align: center; margin: 1.5rem 0; background: #fdfcf7; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; }
+        .image-wrapper img { max-width: 100%; height: auto; max-height: 400px; border-radius: 2px; }
+        .image-fallback-desc { font-size: 0.9rem; color: #555; font-style: italic; margin-top: 0.5rem; padding: 0 1rem; }
+
+        /* TIMER SECTION */
+        .timer-container { background: #222; color: #fff; padding: 1.5rem; border-radius: 8px; text-align: center; margin-bottom: 2.5rem; border: 2px solid var(--accent); }
+        .timer-display { font-family: monospace; font-size: 3.5rem; font-weight: bold; color: var(--accent); margin: 0.5rem 0; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 0.7rem 1.7rem; font-size: 1rem; cursor: pointer; border-radius: 4px; margin: 0.25rem; transition: 0.2s; font-family: inherit; font-weight: bold;}
+        .btn:hover { background: var(--primary-light); }
+        .btn.secondary { background: #555; }
+        .btn.secondary:hover { background: #777; }
+        
+        .navigation-wrapper { display: flex; justify-content: center; margin: 3rem 0; padding-top: 1.5rem; border-top: 1px dashed #ccc; }
+
+        /* MULTI-QUIZ ENGINE STYLE */
+        .single-quiz-question { display: none; }
+        .single-quiz-question.active-q { display: block; }
+        .quiz-option { background: #f5f5f5; padding: 0.8rem; margin: 0.5rem 0; border-radius: 4px; cursor: pointer; border-left: 4px solid #ccc; transition: 0.2s; }
+        .quiz-option:hover { background: #eee; }
+        .quiz-option.correct { background: #d4edda; border-left-color: #28a745; color: #155724; }
+        .quiz-option.wrong { background: #f8d7da; border-left-color: #dc3545; color: #721c24; }
+        .quiz-feedback { margin-top: 0.5rem; font-weight: bold; font-size: 0.95rem; min-height: 25px; }
+        .quiz-report-card { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 1.5rem; border-radius: 4px; text-align: center; margin-top: 1.5rem; display: none; }
+
+        /* SIMULATOR STYLE */
+        .stat-bar-container { background: #eee; border-radius: 8px; margin: 0.5rem 0 1.5rem 0; overflow: hidden; }
+        .stat-bar { height: 25px; width: 50%; background: var(--primary); color: white; text-align: center; font-weight: bold; line-height: 25px; transition: width 0.5s ease; }
+        .stat-bar.corte { background: #4a69bd; }
+        .sim-substep { display: none; }
+        .sim-substep.active { display: block; }
+
+        /* TABS FOR GROUPS */
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .tab-btn { flex: 1; padding: 1rem; background: #ddd; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; border-radius: 4px 4px 0 0; transition: 0.2s; font-family: inherit; }
+        .tab-btn.active { background: var(--primary); color: white; }
+        .tab-content { display: none; padding: 1.5rem; border: 1px solid #ddd; border-top: none; background: #fff;}
+        .tab-content.active { display: block; }
+
+        /* ACCORDION REPERTI */
+        .accordion-btn { width: 100%; background: #f1f1f1; color: var(--dark); cursor: pointer; padding: 1.2rem; text-align: left; border: 1px solid #ddd; border-left: 5px solid var(--primary); font-size: 1.1rem; font-weight: bold; font-family: inherit; margin-top: 0.5rem; border-radius: 4px; transition: 0.2s; }
+        .accordion-btn:hover { background: #e5e5e5; }
+        .accordion-content { display: none; padding: 1.5rem; border: 1px solid #ddd; border-top: none; background: #fdfdfd; border-radius: 0 0 4px 4px; }
+        blockquote { margin: 0 0 1rem 0; font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; color: #444; }
+        .debate-tip { background: #fff3cd; padding: 0.8rem; border-radius: 4px; font-size: 0.9rem; border: 1px solid #ffeeba; }
+
+        textarea { width: 100%; height: 80px; margin-top: 0.5rem; font-family: inherit; box-sizing: border-box; -webkit-user-select: text; user-select: text; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<!-- SCHERMATA DI PROTEZIONE CON PASSWORD -->
+<div id="lock-screen">
+    <div class="lock-box">
+        <h2 style="margin-top:0; color: var(--primary);">Accesso riservato</h2>
+        <p>Inserisci la parola d'ordine fornita dal docente per accedere al laboratorio storico.</p>
+        <input type="password" id="password-field" class="lock-input" placeholder="Parola d'ordine">
+        <button class="btn" onclick="unlockPage()">Verifica codice</button>
+        <p id="lock-error" style="color:red; font-size:0.9rem; margin-top:0.5rem; display:none;">Codice errato. Riprova.</p>
+    </div>
+</div>
+
+<header>
+    <h1>🏛️ Mirabeau: rivoluzionario, mediatore o traditore?</h1>
+    <p>Laboratorio scientifico-didattico di crisi istituzionale (1789-1792)</p>
+</header>
+
+<div class="container">
+
+    <!-- TIMER INTERATTIVO SEMPRE IN EVIDENZA -->
+    <div class="timer-container">
+        <h3>⏱️ Controllo del tempo della sessione corrente</h3>
+        <div class="timer-display" id="display">15:00</div>
+        <button class="btn" onclick="startTimer(15)">Studio fonti (15m)</button>
+        <button class="btn" onclick="startTimer(20)">Lavoro di gruppo (20m)</button>
+        <button class="btn" onclick="startTimer(10)">Discussione debate (10m)</button>
+        <button class="btn secondary" id="pauseBtn" onclick="togglePause()">Pausa</button>
+    </div>
+
+
+    <!-- PASSO 1: SCENARIO E INTRODUZIONE -->
+    <div id="step-1" class="activity-step active-step">
+        <div class="section-box">
+            <h2>Fase 1: Lo scenario storico e l'enigma di Mirabeau</h2>
+            <p>Parigi, novembre 1792. La monarchia è ufficialmente caduta e l'esame dei documenti privati di Luigi XVI porta alla luce una verità sconvolgente per i rivoluzionari: il conte di Mirabeau, la voce tonante del Terzo Stato, riceveva compensi segreti dalla corte dei Borbone. Questo strumento lineare vi guiderà passo dopo passo nell'analisi della sua figura, sfidandovi a comprendere le difficili dinamiche della stabilità istituzionale.</p>
+            
+            <div class="image-wrapper">
+                <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcRphlJxA3scqPOB3KDI9Jal-Xh_fNv25YZ0f9Ppyh5S3NURY0tCX91l4CCRA2zE2WkdqtQ8NwqoicxwEvU" alt="Ritratto del Conte di Mirabeau">
+                <div class="image-fallback-desc">
+                    <strong>Nota iconografica di sicurezza:</strong> Incisione del volto del conte di Mirabeau con i classici capelli mossi settecenteschi e lo sguardo risoluto, icona dell'oratoria parlamentare della prima Assemblea nazionale.
+                </div>
+            </div>
+        </div>
+        <div class="navigation-wrapper">
+            <button class="btn" onclick="changeStep(2)">Procedi con l'attività (Vai ai quiz) →</button>
+        </div>
+    </div>
+
+
+    <!-- PASSO 2: I 5 QUIZ FORMATIVI IN SEQUENZA CON VALUTAZIONE -->
+    <div id="step-2" class="activity-step">
+        <div class="section-box">
+            <h2>Fase 2: Cinque quiz formativi di verifica delle competenze</h2>
+            <p>Rispondi alle domande per verificare la tua comprensione del contesto. Le domande appariranno una alla volta e riceverai un report di valutazione finale.</p>
+            
+            <div id="quiz-wrapper">
+                <!-- QUESTION 1 -->
+                <div id="q-block-1" class="single-quiz-question active-q">
+                    <p><strong>1. Quale prerogativa regia difese accanitamente Mirabeau durante i dibattiti costituzionali del settembre 1789?</strong></p>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 1, 'L\'abolizione totale dei privilegi feudali.')">L'abolizione totale dei privilegi feudali</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, true, 1, 'Il veto regio assoluto sulle leggi approvate dall\'Assemblea.')">Il diritto di veto assoluto del Re</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 1, 'Il trasferimento coatto della corte imperiale a Parigi.')">Il trasferimento della corte a Parigi</div>
+                </div>
+
+                <!-- QUESTION 2 -->
+                <div id="q-block-2" class="single-quiz-question">
+                    <p><strong>2. Per quale motivo Mirabeau si candidò per il Terzo Stato pur essendo un nobile?</strong></p>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 2, 'Perché odiava profondamente la forma di governo monarchica.')">Perché voleva distruggere subito la monarchia</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, true, 2, 'Venne espulso dalla camera della nobiltà provenzale per via dei suoi costanti scandali personali.')">Venne rifiutato dalla nobiltà a causa dei suoi scandali privati</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 2, 'Il Re gli impose di infiltrarsi tra i borghesi come spia.')">Per ordine diretto del sovrano come infiltrato</div>
+                </div>
+
+                <!-- QUESTION 3 -->
+                <div id="q-block-3" class="single-quiz-question">
+                    <p><strong>3. Che cosa svelò l'Armadio di Ferro (armoire de fer) nel novembre del 1792?</strong></p>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, true, 3, 'Le lettere segrete che dimostravano i pagamenti mensili erogati dalla Corona a Mirabeau.')">Le lettere e i finanziamenti segreti della corte a Mirabeau</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 3, 'Un piano di fuga per consegnare i territori francesi agli eserciti austro-prussiani.')">I piani militari per far invadere la Francia dalla Prussia</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 3, 'I tesori rubati dalle chiese di Parigi prima della secolarizzazione.')">I gioielli nascosti sottratti al clero secolarizzato</div>
+                </div>
+
+                <!-- QUESTION 4 -->
+                <div id="q-block-4" class="single-quiz-question">
+                    <p><strong>4. Quale modello politico istituzionale proponeva Mirabeau per la nuova Francia?</strong></p>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 4, 'La repubblica democratica basata sul suffragio universale maschile.')">La repubblica democratica sul modello americano</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 4, 'Un assolutismo illuminato senza la presenza di un parlamento.')">L'assolutismo illuminato sul modello prussiano</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, true, 4, 'Una monarchia bilanciata da un parlamento, sul modello costituzionale inglese.')">La monarchia costituzionale sul modello parlamentare inglese</div>
+                </div>
+
+                <!-- QUESTION 5 -->
+                <div id="q-block-5" class="single-quiz-question">
+                    <p><strong>5. Dove fu inizialmente sepolto Mirabeau alla sua morte nel 1791 prima dello scandalo?</strong></p>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, true, 5, 'Fu la prima personalità illustre a ricevere la sepoltura patriottica nel neonato Panthéon di Parigi.')">Fu il primo a essere celebrato e sepolto nel Panthéon</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 5, 'Nelle catacombe comuni destinate ai poveri del sobborgo di Saint-Antoine.')">Nelle catacombe comuni della città di Parigi</div>
+                    <div class="quiz-option" onclick="processQuizAnswer(this, false, 5, 'Nella cappella reale di Versailles con tutti gli onori della dinastia.')">Nella cappella reale di Versailles accanto ai vecchi re</div>
+                </div>
+            </div>
+
+            <div id="quiz-general-feedback" class="quiz-feedback"></div>
+            
+            <div id="final-report-card" class="quiz-report-card">
+                <h4>Esito della verifica formativa</h4>
+                <p id="score-text"></p>
+                <p id="evaluation-text"></p>
+            </div>
+        </div>
+        <div class="navigation-wrapper">
+            <button class="btn secondary" onclick="changeStep(1)">← Indietro</button>
+            <button id="next-to-step3-btn" class="btn" onclick="changeStep(3)" style="display:none;">Procedi con l'attività (Vai alla simulazione) →</button>
+        </div>
+    </div>
+
+
+    <!-- PASSO 3: IL SIMULATORE DI SCELTE (REALPOLITIK) -->
+    <div id="step-3" class="activity-step">
+        <div class="section-box">
+            <h2>Fase 3: Simulatore di scelte strategiche (La bilancia del potere)</h2>
+            <p>Rivivi le decisioni cruciali di Mirabeau. Ogni scelta cambierà i valori di consenso dei due schieramenti contrapposti. Ragiona da statista.</p>
+            
+            <div style="margin-bottom: 1.5rem; background: #eee; padding: 1rem; border-radius: 4px;">
+                <label><strong>Consenso della piazza (Rivoluzionari):</strong></label>
+                <div class="stat-bar-container"><div id="bar-popolo" class="stat-bar">50%</div></div>
+                
+                <label><strong>Favore della corte (Il Re):</strong></label>
+                <div class="stat-bar-container"><div id="bar-corte" class="stat-bar corte">50%</div></div>
+            </div>
+
+            <div id="sim-sub-1" class="sim-substep active">
+                <p><strong>Decisione 1 di 3:</strong> L'Assemblea discute il diritto di veto reale. Cosa difendi pubblicamente?</p>
+                <button class="btn" onclick="executeSimChoice(1, 25, -30, 'Assecondi la piazza. Diventi l\'idolo dei club, ma la corte interrompe i finanziamenti.')">Veto puramente sospensivo (Vince il popolo)</button>
+                <button class="btn" onclick="executeSimChoice(1, -20, 30, 'Sostieni il Re. Ricevi l\'oro della corte, ma i sanculotti iniziano a diffidare di te.')">Veto reale assoluto (Vince la corte)</button>
+            </div>
+
+            <div id="sim-sub-2" class="sim-substep">
+                <p><strong>Decisione 2 di 3:</strong> Lo Stato è in bancarotta. Si propone l'esproprio dei beni della Chiesa. Come voti?</p>
+                <button class="btn" onclick="executeSimChoice(2, 20, -25, 'Voti l\'esproprio. La finanza respira e la piazza esulta, ma la corte ti considera un violatore della proprietà.')">Nazionalizzazione dei beni ecclesiastici</button>
+                <button class="btn" onclick="executeSimChoice(2, -30, 25, 'Difendi le proprietà del clero. Il Re ringrazia, ma il popolo ti accusa di voler affamare lo Stato.')">Opposizione legale alla confisca dei beni</button>
+            </div>
+
+            <div id="sim-sub-3" class="sim-substep">
+                <p><strong>Decisione 3 di 3:</strong> Chi dichiara la guerra alle potenze straniere? Il sovrano o il parlamento?</p>
+                <button class="btn" onclick="executeSimChoice(3, 30, -35, 'Potere totale all\'Assemblea. Apoteosi tra i giacobini, ma rottura insanabile e totale con le Tuileries.')">Potere di pace e guerra esclusivo all'Assemblea</button>
+                <button class="btn" onclick="executeSimChoice(3, 10, 15, 'Formula mediana: il Re propone l\'azione, l\'Assemblea decide se ratificarla. Sei il vero mediatore.')">Diritto concorrente e condiviso tra Re e Assemblea</button>
+            </div>
+            
+            <p id="sim-feedback" style="font-style: italic; color: #444; margin-top: 1rem; font-weight: bold;"></p>
+        </div>
+        <div class="navigation-wrapper">
+            <button class="btn secondary" onclick="changeStep(2)">← Indietro</button>
+            <button id="next-to-step4-btn" class="btn" onclick="changeStep(4)" style="display:none;">Procedi con l'attività (Vai ai comitati) →</button>
+        </div>
+    </div>
+
+
+    <!-- PASSO 4: WORKSHOP DEI COMITATI DI CRISI -->
+    <div id="step-4" class="activity-step">
+        <div class="section-box">
+            <h2>Fase 4: Workshop operativo dei comitati di crisi</h2>
+            <p>Selezionate la scheda del vostro gruppo per visualizzare il mandato e raccogliere le idee per l'arringa parlamentare.</p>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'gruppo1')">1. Fazione radicale</button>
+                <button class="tab-btn" onclick="openTab(event, 'gruppo2')">2. Fazione moderata</button>
+                <button class="tab-btn" onclick="openTab(event, 'gruppo3')">3. Consiglio regio</button>
+            </div>
+
+            <div id="gruppo1" class="tab-content active">
+                <h4>Comitato di salute pubblica (L'accusa repubblicana)</h4>
+                <p>Il vostro compito è dimostrare il tradimento e richiedere la cacciata immediata delle spoglie dell'oratore dal Panthéon nazionale.</p>
+                <textarea placeholder="Appunti del gruppo per la tesi dell'accusa..."></textarea>
+            </div>
+            <div id="gruppo2" class="tab-content">
+                <h4>Club dei foglianti (La difesa costituzionale)</h4>
+                <p>Il vostro compito è difendere il realismo politico. Dimostrate che Mirabeau usava il Re solo per ancorare lo stato di diritto senza violenze.</p>
+                <textarea placeholder="Appunti del gruppo per la tesi del pragmatismo..."></textarea>
+            </div>
+            <div id="gruppo3" class="tab-content">
+                <h4>Consiglio delle Tuileries (La simulazione della Corona)</h4>
+                <p>Pianificate le direttive d'azione segrete da impartire a Mirabeau per tutelare i poteri dinastici superstiti dei Borbone.</p>
+                <textarea placeholder="Appunti del gruppo per le condizioni regie..."></textarea>
+            </div>
+        </div>
+        <div class="navigation-wrapper">
+            <button class="btn secondary" onclick="changeStep(3)">← Indietro</button>
+            <button class="btn" onclick="changeStep(5)">Procedi con l'attività (Vai ai reperti) →</button>
+        </div>
+    </div>
+
+
+    <!-- PASSO 5: SEI REPERTI ACCORDION PER IL DEBATE -->
+    <div id="step-5" class="activity-step">
+        <div class="section-box">
+            <h2>Fase 5: Archivio fonti storiografiche (I sei reperti per il debate)</h2>
+            <p>Clicca sui pulsanti sottostanti per esaminare singolarmente i documenti e le tracce interpretative necessarie al dibattito.</p>
+            
+            <button class="accordion-btn" onclick="toggleAccordion('recA')">📁 Reperto 1: La sfida dell'Assemblea (Giugno 1789)</button>
+            <div id="recA" class="accordion-content">
+                <blockquote>«Signore, andate a dire a coloro che vi mandano che noi siamo qui per la volontà del popolo, e che non ci strapperete dai nostri seggi se non per la forza delle baionette!»</blockquote>
+                <div class="debate-tip"><strong>Utilizzo:</strong> Ottima difesa per dimostrare il coraggio originario e la spinta rivoluzionaria autentica.</div>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('recB')">📁 Reperto 2: La paura della tirannia parlamentare (Settembre 1789)</button>
+            <div id="recB" class="accordion-content">
+                <blockquote>«Preferirei vivere a Costantinopoli... piuttosto che in una repubblica dove un'assemblea di 1200 persone si dichiarasse sovrana assoluta. Il veto del Re protegge la nazione.»</blockquote>
+                <div class="debate-tip"><strong>Utilizzo:</strong> Dimostra la coerenza ideologica: Mirabeau cercava un equilibrio di poteri per evitare nuovi dispotismi.</div>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('recC')">📁 Reperto 3: La posizione radicale di Robespierre (Ottobre 1789)</button>
+            <div id="recC" class="accordion-content">
+                <blockquote>«La sovranità o appartiene interamente al popolo o appartiene al monarca. Chi inventa sistemi intermedi vuole solo vendere i diritti civili...»</blockquote>
+                <div class="debate-tip"><strong>Utilizzo:</strong> Ottima accusa per smontare il velo della mediazione e bollarlo come inganno ai danni del popolo.</div>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('recD')">📁 Reperto 4: La nota riservata rinvenuta nell'Armadio di Ferro (Maggio 1790)</button>
+            <div id="recD" class="accordion-content">
+                <blockquote>«Sire, io non voglio essere l'artefice della distruzione della monarchia... Un solo popolo, un solo re: l'uguaglianza assoluta facilita l'esercizio del potere reale.»</blockquote>
+                <div class="debate-tip"><strong>Utilizzo:</strong> Il cuore del mistero. Dimostra il patto segreto. Realpolitik per governare il sovrano o tradimento economico?</div>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('recE')">📁 Reperto 5: La condanna preventiva sui giornali (Agosto 1790)</button>
+            <div id="recE" class="accordion-content">
+                <blockquote>«Cittadini, aprite gli occhi... ha l'anima di un cortigiano sotto la maschera di un tribuno.» — Marat, L'Ami du Peuple</blockquote>
+                <div class="debate-tip"><strong>Utilizzo:</strong> Evidenzia che la base popolare ed i cordiglieri avevano già compreso il doppio gioco molto prima del 1792.</div>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('recF')">📁 Reperto 6: Il giudizio postumo dell'Assemblea (Novembre 1792)</button>
+            <div id="recF" class="accordion-content">
+                <blockquote>«Nessun uomo può essere grande senza virtù patriottica. L'Assemblea dichiara che Honoré Gabriel Riqueti non è degno di occupare un posto nel tempio dei grandi uomini.»</blockquote>
+                <div class="debate-tip"><strong>Utilizzo:</strong> La sanzione ufficiale della memoria storica operata dalla Convenzione nazionale al momento dello sfratto.</div>
+            </div>
+
+            <div class="image-wrapper" style="margin-top: 2.5rem;">
+                <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSOkG7watdSOeD35bGdnVOsfiNtecepfRTTx820PmyanMVfnKMDdPFWJPBtvLBK4CME5SWEZ-N7mF_LQJo" alt="Assalto alle Tuileries">
+                <div class="image-fallback-desc">
+                    <strong>Nota iconografica di sicurezza:</strong> Dipinto dell'insurrezione delle Tuileries nel 1792, evento che causò il crollo della monarchia e la scoperta delle carte segrete nell'armadio blindato.
+                </div>
+            </div>
+        </div>
+        <div class="navigation-wrapper">
+            <button class="btn secondary" onclick="changeStep(4)">← Indietro</button>
+            <button class="btn" onclick="changeStep(6)">Procedi con l'attività (Vai all'Exit ticket) →</button>
+        </div>
+    </div>
+
+
+    <!-- PASSO 6: EXIT TICKET CONCLUSIVO DI VERIFICA -->
+    <div id="step-6" class="activity-step">
+        <div class="section-box" style="border: 2px dashed var(--primary); background: #fffcf9;">
+            <h2>Fase 6: Scrittura critica individuale (Exit ticket)</h2>
+            <p>In base alle competenze acquisite, rispondi al quesito finale di sintesi prima di chiudere il laboratorio:</p>
+            <p><em>«Nel contesto di una transizione politica complessa, conta di più l'intransigenza etica dei valori assoluti o il pragmatismo flessibile dei risultati concreti? Argomenta facendo esplicito riferimento alle scelte del conte di Mirabeau.»</em></p>
+            <textarea id="exit-text" placeholder="Scrivi la tua riflessione sintetica (massimo 3-4 righe)..."></textarea>
+            <br><br>
+            <button class="btn" onclick="alert('Riflessione finale memorizzata con successo nel sistema!')">Invia e memorizza risposta</button>
+        </div>
+        <div class="navigation-wrapper">
+            <button class="btn secondary" onclick="changeStep(5)">← Indietro</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ACCESSO PROTETTO DA PASSWORD
+    function unlockPage() {
+        const input = document.getElementById('password-field').value;
+        const correctPassword = "Pallacorda1789";
+        if (input === correctPassword) {
+            document.getElementById('lock-screen').style.display = 'none';
+        } else {
+            document.getElementById('lock-error').style.display = 'block';
+        }
+    }
+    document.getElementById('password-field').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') unlockPage();
+    });
+
+    // BLOCCO SISTEMI DI COPIA E SALVATAGGIO STANDARD
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('keydown', function(event) {
+        if ((event.ctrlKey || event.metaKey) && (event.key === 's' || event.key === 'u' || event.key === 'p')) {
+            event.preventDefault();
+            alert("Download e ispezione non consentiti in ambiente di verifica.");
+        }
+    });
+
+    // GESTIONE DEI MACRO PASSI LINEARI
+    function changeStep(stepNumber) {
+        const steps = document.getElementsByClassName('activity-step');
+        for(let s of steps) {
+            s.classList.remove('active-step');
+        }
+        document.getElementById(`step-${stepNumber}`).classList.add('active-step');
+        window.scrollTo(0,0);
+    }
+
+    // TIMER ENGINE
+    let countdown, timerSeconds, isPaused = false;
+    function startTimer(minutes) {
+        clearInterval(countdown); isPaused = false;
+        document.getElementById('pauseBtn').innerText = "Pausa";
+        timerSeconds = minutes * 60; displayTime();
+        countdown = setInterval(function() {
+            if(!isPaused) {
+                timerSeconds--; displayTime();
+                if (timerSeconds <= 0) { clearInterval(countdown); alert("Tempo per la fase scaduto!"); }
+            }
+        }, 1000);
+    }
+    function togglePause() { isPaused = !isPaused; document.getElementById('pauseBtn').innerText = isPaused ? "Riprendi" : "Pausa"; }
+    function displayTime() {
+        const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+        const s = (timerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('display').innerText = `${m}:${s}`;
+    }
+
+    // MULTI-QUIZ ENGINE (5 DOMANDE SEQUENZIALI)
+    let currentQuizIndex = 1;
+    let correctAnswersCount = 0;
+
+    function processQuizAnswer(element, isCorrect, quizNumber, feedbackText) {
+        const feedbackBox = document.getElementById('quiz-general-feedback');
+        const currentBlock = document.getElementById(`q-block-${quizNumber}`);
+        const options = currentBlock.getElementsByClassName('quiz-option');
+        
+        for(let opt of options) opt.style.pointerEvents = "none";
+
+        if(isCorrect) {
+            element.className = "quiz-option correct";
+            feedbackBox.innerHTML = "Corretto! " + feedbackText;
+            feedbackBox.style.color = "#28a745";
+            correctAnswersCount++;
+        } else {
+            element.className = "quiz-option wrong";
+            feedbackBox.innerHTML = "Errato. La risposta corretta riguardava le reali prerogative istituzionali.";
+            feedbackBox.style.color = "#dc3545";
+        }
+
+        setTimeout(function() {
+            feedbackBox.innerHTML = "";
+            currentBlock.classList.remove('active-q');
+            currentQuizIndex++;
+            
+            const nextBlock = document.getElementById(`q-block-${currentQuizIndex}`);
+            if(nextBlock) {
+                nextBlock.classList.add('active-q');
+            } else {
+                showQuizFinalReport();
+            }
+        }, 3000);
+    }
+
+    function showQuizFinalReport() {
+        const report = document.getElementById('final-report-card');
+        const scoreText = document.getElementById('score-text');
+        const evalText = document.getElementById('evaluation-text');
+        
+        // Calcolo voto in decimi
+        const grade = (correctAnswersCount / 5) * 10;
+        
+        report.style.display = "block";
+        scoreText.innerHTML = `Hai risposto correttamente a <strong>${correctAnswersCount}</strong> domande su 5.`;
+        
+        if(grade >= 8) {
+            evalText.innerHTML = `Voto equivalente: <strong>${grade}/10</strong>. Eccellente padronanza del contesto storiografico di fine Settecento!`;
+        } else if(grade >= 6) {
+            evalText.innerHTML = `Voto equivalente: <strong>${grade}/10</strong>. Competenza sufficiente. Rileggi i dettagli delle fazioni prima del debate.`;
+        } else {
+            evalText.innerHTML = `Voto equivalente: <strong>${grade}/10</strong>. Studio insufficiente. È raccomandata una rilettura attenta dei reperti d'archivio.`;
+        }
+        
+        document.getElementById('next-to-step3-btn').style.display = "inline-block";
+    }
+
+    // SIMULATOR ENGINE DECISIONALE
+    let popolo = 50, corte = 50;
+    function executeSimChoice(step, deltaPopolo, deltaCorte, textFeedback) {
+        popolo = Math.max(0, Math.min(100, popolo + deltaPopolo));
+        corte = Math.max(0, Math.min(100, corte + deltaCorte));
+        
+        document.getElementById('bar-popolo').style.width = popolo + '%';
+        document.getElementById('bar-popolo').innerText = popolo + '%';
+        document.getElementById('bar-corte').style.width = corte + '%';
+        document.getElementById('bar-corte').innerText = corte + '%';
+        
+        document.getElementById('sim-feedback').innerText = textFeedback;
+        document.getElementById(`sim-sub-${step}`).classList.remove('active');
+        
+        const nextSub = step + 1;
+        const nextTarget = document.getElementById(`sim-sub-${nextSub}`);
+        if(nextTarget) {
+            nextTarget.classList.add('active');
+        } else {
+            document.getElementById('sim-feedback').innerHTML += "<br><br><strong>Simulazione conclusa.</strong> Hai sperimentato la complessità del bilanciamento del potere.";
+            document.getElementById('next-to-step4-btn').style.display = "inline-block";
+        }
+    }
+
+    // ACCORDION FOR EVIDENCE
+    function toggleAccordion(id) {
+        const content = document.getElementById(id);
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+    }
+
+    // TABS FOR GROUPS
+    function openTab(evt, groupName) {
+        const contents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < contents.length; i++) contents[i].style.display = "none";
+        const buttons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < buttons.length; i++) buttons[i].className = buttons[i].className.replace(" active", "");
+        document.getElementById(groupName).style.display = "block";
+        if(evt && evt.currentTarget) evt.currentTarget.className += " active";
+    }
+</script>
+</body>
+</html>
